@@ -1,0 +1,19 @@
+#!/usr/bin/expect  -f
+
+set timeout 3
+
+set ipaddr [lindex $argv 0]
+set ldate [lindex $argv 1]
+set appname [lindex $argv 2]
+set instname [lindex $argv 3]
+
+spawn ssh root@$ipaddr
+
+expect "yes/no" { send "yes\r"
+        expect "* password:" { send "123456a?\r"}
+        }
+expect "* password:" { send "123456a?\r" }
+expect "*# " { send "mkdir -p /tmp/logs/$ldate/$appname/$instname\r" }
+
+expect "*# " { send "exit\r"}
+expect eof
